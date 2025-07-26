@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const BASE_URL = process.env.BACKEND_URL || 'http://localhost:3001/products';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const token = req.cookies.get('token')?.value;
+  const { id } = await params;
 
   try {
-    const res = await fetch(`${BASE_URL}/${params.id}`, {
+    const res = await fetch(`${BASE_URL}/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,7 +29,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const token = req.cookies.get('token')?.value;
   const body = await req.json();
-  const {id} = await params;
+  const { id } = await params;
 
   try {
     const res = await fetch(`${BASE_URL}/${id}`, {
