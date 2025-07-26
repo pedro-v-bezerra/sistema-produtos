@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const BASE_URL = process.env.BACKEND_URL || 'http://localhost:3001';
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3001';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const token = req.cookies.get('token')?.value;
