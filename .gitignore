@@ -1,0 +1,15 @@
+# Ignorar pastas de node_modules
+**/node_modules
+
+# Ignorar arquivos de ambiente
+**/.env
+
+# Ignorar dados do MySQL gerados pelo Docker
+mysql-data/
+
+# Ignorar lockfiles específicos
+**/package-lock.json
+
+# Evita problemas com arquivos do sistema
+.DS_Store
+Thumbs.db

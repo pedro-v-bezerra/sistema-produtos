@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Cores base neutras */
+    --background: 0 0% 100%;         /* Branco puro */
+    --foreground: 0 0% 13%;          /* Preto suavizado */
+
+    --card: 0 0% 100%;               /* Branco */
+    --card-foreground: 0 0% 13%;
+
+    --popover: 0 0% 100%;            /* Branco */
+    --popover-foreground: 0 0% 13%;
+
+    /* Tons de cinza (primário e secundário) */
+    --primary: 0 0% 13%;             /* Preto suave */
+    --primary-foreground: 0 0% 100%; /* Branco */
+
+    --secondary: 0 0% 96%;           /* Cinza muito claro */
+    --secondary-foreground: 0 0% 20%;
+
+    --muted: 0 0% 96%;               /* Igual ao secondary */
+    --muted-foreground: 0 0% 45%;    /* Cinza médio */
+
+    --accent: 0 0% 90%;              /* Cinza claro */
+    --accent-foreground: 0 0% 13%;
+
+    /* Cores de estado (mantidas) */
+    --destructive: 0 84% 60%;        /* Vermelho - erro */
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 71% 45%;          /* Verde - sucesso */
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;           /* Amarelo/laranja - aviso */
+    --warning-foreground: 0 0% 100%;
+
+    /* Elementos de UI */
+    --border: 0 0% 90%;              /* Cinza claro para bordas */
+    --input: 0 0% 90%;               /* Campos de input */
+    --ring: 0 0% 80%;                /* Anéis de foco */
+
+    --radius: 0.5rem;                /* Bordas arredondadas */
+
+    /* Sidebar (tons neutros) */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 25%;
+    --sidebar-primary: 0 0% 15%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 0 0% 95%;
+    --sidebar-accent-foreground: 0 0% 15%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 0 0% 80%;
+
+    /* Sombras sutis */
+    --shadow-soft: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  }
+
+  .dark {
+    /* Versão dark mode (invertida) */
+    --background: 0 0% 8%;           /* Preto suavizado */
+    --foreground: 0 0% 98%;          /* Branco */
+
+    --card: 0 0% 10%;                /* Preto mais claro */
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;             /* Branco */
+    --primary-foreground: 0 0% 13%;  /* Preto */
+
+    --secondary: 0 0% 15%;           /* Cinza escuro */
+    --secondary-foreground: 0 0% 90%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 0 0% 20%;
+    --accent-foreground: 0 0% 98%;
+
+    /* Cores de estado (dark) */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 40%;
+
+    /* Sidebar dark */
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 0 0% 98%;
+    --sidebar-primary-foreground: 0 0% 10%;
+    --sidebar-accent: 0 0% 20%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 0 0% 40%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
