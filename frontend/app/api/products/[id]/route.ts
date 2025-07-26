@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const BASE_URL = process.env.BACKEND_URL || 'http://localhost:3001/products';
+const BASE_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const token = req.cookies.get('token')?.value;
   const { id } = await params;
 
   try {
-    const res = await fetch(`${BASE_URL}/${id}`, {
+    const res = await fetch(`${BASE_URL}/products/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -32,7 +32,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   const { id } = await params;
 
   try {
-    const res = await fetch(`${BASE_URL}/${id}`, {
+    const res = await fetch(`${BASE_URL}/products/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
   const token = req.cookies.get('token')?.value;
   const { id } = await params;
   try {
-    const res = await fetch(`${BASE_URL}/${id}`, {
+    const res = await fetch(`${BASE_URL}/products/${id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,

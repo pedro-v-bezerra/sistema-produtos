@@ -2,7 +2,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-const BASE_URL = process.env.BACKEND_URL || 'http://localhost:3001/products';
+const BASE_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 
 export async function GET() {
   
@@ -10,7 +10,7 @@ export async function GET() {
   const token = cookieStore.get('token')?.value;
 
   try {
-    const res = await fetch(`${BASE_URL}`, {
+    const res = await fetch(`${BASE_URL}/products`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
   const token = cookieStore.get('token')?.value;
 
   try {
-    const res = await fetch(`${BASE_URL}`, {
+    const res = await fetch(`${BASE_URL}/products`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+const BASE_URL = process.env.BACKEND_URL || 'http://localhost:3001';
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
   try {
-    const response = await fetch('http://localhost:3001/auth/login', {
+    const response = await fetch(`${BASE_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
