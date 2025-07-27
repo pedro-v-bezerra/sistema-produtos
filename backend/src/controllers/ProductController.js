@@ -1,53 +1,128 @@
-const { Product } = require("../models");
+const { Product } = require('../models');
 
 module.exports = {
-  async index(req, res) {
-    const products = await Product.findAll();
-    res.json(products);
-  },
-
-  async show(req, res) {
-    const { id } = req.params;
-    const product = await Product.findByPk(id);
-
-    if (!product)
-      return res.status(404).json({ error: "Produto não encontrado" });
-
-    res.json(product);
-  },
-
-  async store(req, res) {
-    const { name, description, price, stock, category } = req.body;
-    if (!name || !price) {
-      return res.status(400).json({ error: "Nome e preço são obrigatórios" });
+  async listAll(req, res) {
+    try {
+      const products = await Product.findAll();
+      return res.status(200).json({
+        message: 'Produtos listados com sucesso',
+        error: false,
+        data: products,
+      });
+    } catch {
+      return res.status(500).json({
+        message: 'Erro ao listar produtos',
+        error: true,
+        data: null,
+      });
     }
+  },
 
-    const product = await Product.create({ name, description, category, price, stock });
-    res.status(201).json(product);
+  async listById(req, res) {
+    try {
+      const { id } = req.params;
+      const product = await Product.findByPk(id);
+
+      if (!product) {
+        return res.status(404).json({
+          message: 'Produto não encontrado',
+          error: true,
+          data: null,
+        });
+      }
+
+      return res.status(200).json({
+        message: 'Produto encontrado com sucesso',
+        error: false,
+        data: product,
+      });
+    } catch {
+      return res.status(500).json({
+        message: 'Erro ao buscar o produto',
+        error: true,
+        data: null,
+      });
+    }
+  },
+
+  async add(req, res) {
+    try {
+      const { name, description, price, stock, category } = req.body;
+
+      const product = await Product.create({ name, description, category, price, stock });
+
+      return res.status(201).json({
+        message: 'Produto adicionado com sucesso',
+        error: false,
+        data: product,
+      });
+    } catch {
+      return res.status(500).json({
+        message: 'Erro ao adicionar o produto',
+        error: true,
+        data: null,
+      });
+    }
   },
 
   async update(req, res) {
-    const { id } = req.params;
-    const { name, description, price, stock, category } = req.body;
+    try {
+      const { id } = req.params;
+      const { name, description, price, stock, category } = req.body;
 
-    const product = await Product.findByPk(id);
+      const product = await Product.findByPk(id);
 
-    if (!product)
-      return res.status(404).json({ error: "Produto não encontrado" });
+      if (!product) {
+        return res.status(404).json({
+          message: 'Produto não encontrado',
+          error: true,
+          data: null,
+        });
+      }
 
-    await product.update({ name, description, category, price, stock });
-    res.json(product);
+      const updatedProduct = await product.update({ name, description, category, price, stock });
+
+      return res.status(200).json({
+        message: 'Produto atualizado com sucesso',
+        error: false,
+        data: updatedProduct,
+      });
+    } catch {
+      return res.status(500).json({
+        message: 'Erro ao atualizar o produto',
+        error: true,
+        data: null,
+      });
+    }
   },
 
-  async destroy(req, res) {
-    const { id } = req.params;
+  async delete(req, res) {
+    try {
+      const { id } = req.params;
 
-    const product = await Product.findByPk(id);
+      const product = await Product.findByPk(id);
 
-    if (!product)
-      return res.status(404).json({ error: "Produto não encontrado" });
+      if (!product) {
+        return res.status(404).json({
+          message: 'Produto não encontrado',
+          error: true,
+          data: null,
+        });
+      }
 
-    await product.destroy();
-    res.status(204).send(); // sem conteúdo
+      await product.destroy();
+
+      return res.status(200).json({
+        message: 'Produto deletado com sucesso',
+        error: false,
+        data: null,
+      });
+    } catch {
+      return res.status(500).json({
+        message: 'Erro ao deletar o produto',
+        error: true,
+        data: null,
+      });
+    }
   },
 };

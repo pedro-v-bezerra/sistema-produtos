@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+coverage
+*.md
+*.html
+*.config.js
+.env
+Dockerfile
+docker-compose*

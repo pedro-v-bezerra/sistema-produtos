@@ -1,3 +1,9 @@
-# Ignore artifacts:
-build
-coverage
+.next/
+node_modules/
+dist/
+public/
+*.config.ts
+.env*
+.next-env.d.ts
+**/*.svg
+**/*.css

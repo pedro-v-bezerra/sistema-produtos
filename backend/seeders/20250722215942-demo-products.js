@@ -1,49 +1,49 @@
-"use strict";
+'use strict';
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.bulkInsert("Products", [
+  async up(queryInterface) {
+    await queryInterface.bulkInsert('Products', [
       {
-        name: "Produto 1",
-        description: "Descrição do Produto 1",
-        category: "Categoria 1",
-        price: 29.99,
-        stock: 10,
+        name: 'Camiseta Wanted Preta',
+        description: 'Camiseta da Wanted da cor Preta tamanho G',
+        category: 'Vestuário',
+        price: 91.99,
+        stock: 50,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: "Produto 2",
-        description: "Descrição do Produto 2",
-        category: "Categoria 2",
-        price: 49.9,
+        name: 'Notebook DELL 15',
+        description: 'Notebook Dell com 15 polegadas, 16GB de RAM e 512GB de SSD',
+        category: 'Informática',
+        price: 2999.99,
         stock: 15,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: "Produto 3",
-        description: "Descrição do Produto 3",
-        category: "Categoria 3",
-        price: 10.0,
-        stock: 16,
+        name: 'Sofá 3 lugares',
+        description: 'Sofá 3 lugares, com 2 cadeiras e 1 mesa',
+        category: 'Móveis',
+        price: 3000.0,
+        stock: 5,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: "Produto 4",
-        description: "Descrição do Produto 4",
-        category: "Categoria 4",
+        name: 'Camiseta Marvel Vermelha',
+        description: 'Camiseta da Marvel da cor Vermelha tamanho M',
+        category: 'Infantil',
         price: 75.0,
         stock: 12,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: "Produto 5",
-        description: "Descrição do Produto 5",
-        category: "Categoria 5",
-        price: 12.99,
+        name: 'Panela de Inox',
+        description: 'Panela de Inox com 2 litros',
+        category: 'Cozinha',
+        price: 69.99,
         stock: 8,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -51,7 +51,7 @@ module.exports = {
     ]);
   },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("Products", null, {});
+  async down(queryInterface) {
+    await queryInterface.bulkDelete('Products', null, {});
   },
 };

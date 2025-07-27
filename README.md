@@ -1,11 +1,28 @@
-# Sistema de Produtos - Backend
+# Sistema de Produtos
 
-Este projeto é o backend da API de produtos, utilizando Node.js, Express, Sequelize e MySQL via Docker.
+## 🚀 Tecnologias
 
----
+### Frontend (Next.js)
+- **Framework**: Next.js 15.4.3 (App Router)
+- **Linguagem**: TypeScript
+- **UI**: Shadcn/ui (Componentes acessíveis)
+- **Estilização**: Tailwind CSS
+- **Gerenciamento de Estado**: React Context API
+- **Formulários**: React Hook Form
+- **Padronização**: ESLint + Prettier (Padronização de código)
 
-## Pré-requisitos
+### Backend (Node.js)
+- **Runtime**: Node.js 18+
+- **Framework**: Express.js
+- **ORM**: Sequelize
+- **Banco de Dados**: MySQL 8 (Container Docker)
+- **Autenticação**: JWT
+- **Validação**: Yup
+- **Padronização**: ESLint + Prettier
 
+## 🛠️ Configuração do Ambiente
+
+### Pré-requisitos
 - [Node.js](https://nodejs.org/) instalado (versão recomendada >=16)
 - [Docker](https://www.docker.com/) instalado e rodando
 - [npm](https://www.npmjs.com/) (vem junto com Node.js)
@@ -29,26 +46,18 @@ cd sistema-produtos/backend
 Crie um arquivo .env na raiz da pasta backend/ com o conteúdo:
 
 DB_HOST=host.docker.internal
-DB_PORT=3307
+DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=root
-DB_NAME=produtos_db
+DB_NAME=mydb
+JWT_SECRET=SEUJWTSECRET
+JWT_EXPIRES_IN=1h
+AUTH_EMAIL=EMAIL_DE_LOGIN_PADRÃO
+AUTH_PASSWORD=SENHA_DE_LOGIN_PADRÃO
 
 ---
 
-### 3. Subir o container MySQL via Docker
-
-Na raiz do projeto (sistema-produtos), execute:
-
-```bash
-docker compose up -d
-```
-
-Esse comando vai iniciar o container do MySQL na porta 3307.
-
----
-
-### 4. Instalar as dependências do backend
+### 3. Instalar as dependências do backend
 
 No diretório backend:
 
@@ -58,35 +67,34 @@ npm install
 
 ---
 
-### 5. Rodar as migrations para criar as tabelas
+### 4. Subir o container MySQL via Docker
 
-Ainda no diretório backend:
+Na raiz do projeto (sistema-produtos), execute:
 
 ```bash
-npx sequelize-cli db:migrate
+docker compose up --build
+```
+
+Esse comando vai iniciar o container do MySQL na porta 3307.
+O projeto está configurado para rodar migrations subir o container, então não precisa se preocupar em rodar manualmente.
+Após este comando o container já terá início, abra um novo terminal para o próximo passo.
+
+---
+
+### 5. Rodar as seeds para popular o banco com produtos de exemplo (Opcional)
+
+```bash
+cd backend
+npx sequelize-cli db:seed
 ```
 
 ---
 
-### 6. Rodar as seeds para popular o banco com produtos de exemplo
-
-```bash
-npx sequelize-cli db:migrate
-```
-
----
-
-### 7. Iniciar o servidor backend
-
-```bash
-node server.js
-```
-
----
-
-### 8. Testar a API
+### 7. Testar a API
 
 Após rodar o backend, você pode testar os endpoints da API de produtos (exemplo):
+
+POST http://localhost:3001/auth/login --> Faça login com as variáveis definidas em .env
 
 GET http://localhost:3001/products
 
@@ -110,21 +118,9 @@ Para limpar o banco, rode npx sequelize-cli db:migrate:undo:all e depois npx seq
 
 ---
 
-## Pré-requisitos
-
-- [Node.js](https://nodejs.org/) instalado (versão recomendada >=16)
-- [npm](https://www.npmjs.com/) (vem junto com Node.js)
-- Editor de texto (ex: VSCode)
-
----
-
-## Passo a passo para rodar o projeto localmente
-
 ### 1. Instalar as dependências
 
-O frontend é simples, feito em Next.JS, utilizando API Context do React, TailwindCSS e alguns elementos de UI, veja o arquivo package.json
-para vizualizar as demais dependências.
-Para o front rode o comando:
+Rode esse comando para instalar as dependências do projeto.
 
 ```bash
 npm install
@@ -136,9 +132,16 @@ npm install
 
 Exemplo de arquivo:
 
-BASE_URL=http://localhost:3001/products
+BASE_URL=http://localhost:3001
 
 ---
+
+### 3. Rodar o projeto localmente
+
+```bash
+npm run dev
+```
+
 # Considerações e Contato
 
 Para considerações, sugestões ou dúvidas entre em contato pelo e-mail pedrolima.dev@hotmail.com

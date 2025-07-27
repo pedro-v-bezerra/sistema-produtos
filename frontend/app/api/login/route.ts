@@ -1,34 +1,23 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3001';
+import { handleApiResponse } from '@/lib/handleApiResponse';
+import { AuthService } from '@/app/services/AuthService';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
   try {
-    const response = await fetch(`${BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
+    const response = await AuthService.login(body);
 
-    const data = await response.json();
+    const data = handleApiResponse(response);
 
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: data.error || 'Erro ao fazer login' },
-        { status: response.status }
-      );
-    }
-
-    const token = data.token;
+    const token = data.data;
 
     const res = NextResponse.json({ success: true });
 
     res.cookies.set({
       name: 'token',
-      value: token,
+      value: String(token),
       httpOnly: true,
       path: '/',
       maxAge: 60 * 60 * 24, // 1 dia

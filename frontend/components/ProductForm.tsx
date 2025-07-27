@@ -1,10 +1,16 @@
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
+import { useState, useEffect } from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 
 export interface Product {
   id?: string;
@@ -22,12 +28,17 @@ interface ProductFormProps {
   isLoading?: boolean;
 }
 
-const ProductForm = ({ product, onSubmit, onCancel, isLoading = false }: ProductFormProps) => {
+const ProductForm = ({
+  product,
+  onSubmit,
+  onCancel,
+  isLoading = false,
+}: ProductFormProps) => {
   const [formData, setFormData] = useState<Product>({
-    name: "",
-    description: "",
+    name: '',
+    description: '',
     price: 0,
-    category: "",
+    category: '',
     stock: 0,
   });
   const { toast } = useToast();
@@ -40,21 +51,21 @@ const ProductForm = ({ product, onSubmit, onCancel, isLoading = false }: Product
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim() || !formData.category.trim()) {
       toast({
-        title: "Erro de validação",
-        description: "Nome e categoria são obrigatórios.",
-        variant: "destructive",
+        title: 'Erro de validação',
+        description: 'Nome e categoria são obrigatórios.',
+        variant: 'destructive',
       });
       return;
     }
 
     if (formData.price <= 0) {
       toast({
-        title: "Erro de validação",
-        description: "O preço deve ser maior que zero.",
-        variant: "destructive",
+        title: 'Erro de validação',
+        description: 'O preço deve ser maior que zero.',
+        variant: 'destructive',
       });
       return;
     }
@@ -63,123 +74,131 @@ const ProductForm = ({ product, onSubmit, onCancel, isLoading = false }: Product
   };
 
   const handleInputChange = (field: keyof Product, value: string | number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-lg border-0 bg-card/90 backdrop-blur-sm">
-      <CardHeader className="space-y-2">
-        <CardTitle className="text-2xl font-bold bg-primary bg-clip-text text-transparent">
-          {product ? "Editar Produto" : "Novo Produto"}
+    <Card className='w-full max-w-2xl mx-auto shadow-lg border-0 bg-card/90 backdrop-blur-sm'>
+      <CardHeader className='space-y-2'>
+        <CardTitle className='text-2xl font-bold '>
+          {product ? 'Editar Produto' : 'Novo Produto'}
         </CardTitle>
-        <CardDescription className="text-muted-foreground">
-          {product ? "Atualize as informações do produto" : "Preencha os dados do novo produto"}
+        <CardDescription className='text-muted-foreground'>
+          {product
+            ? 'Atualize as informações do produto'
+            : 'Preencha os dados do novo produto'}
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="name" className="text-sm font-medium">
+        <form onSubmit={handleSubmit} className='space-y-6'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <div className='space-y-2'>
+              <Label htmlFor='name' className='text-sm font-medium'>
                 Nome do Produto *
               </Label>
               <Input
-                id="name"
-                type="text"
-                placeholder="Nome do produto"
+                id='name'
+                type='text'
+                placeholder='Nome do produto'
                 value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
+                onChange={(e) => handleInputChange('name', e.target.value)}
                 required
-                className="h-11 bg-background/50 border-border/50 focus:border-primary transition-colors"
+                className='h-11 bg-background/50 border-border/50 focus:border-primary transition-colors'
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="category" className="text-sm font-medium">
+            <div className='space-y-2'>
+              <Label htmlFor='category' className='text-sm font-medium'>
                 Categoria *
               </Label>
               <Input
-                id="category"
-                type="text"
-                placeholder="Categoria do produto"
+                id='category'
+                type='text'
+                placeholder='Categoria do produto'
                 value={formData.category}
-                onChange={(e) => handleInputChange("category", e.target.value)}
+                onChange={(e) => handleInputChange('category', e.target.value)}
                 required
-                className="h-11 bg-background/50 border-border/50 focus:border-primary transition-colors"
+                className='h-11 bg-background/50 border-border/50 focus:border-primary transition-colors'
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm font-medium">
+          <div className='space-y-2'>
+            <Label htmlFor='description' className='text-sm font-medium'>
               Descrição
             </Label>
             <Textarea
-              id="description"
-              placeholder="Descrição do produto"
+              id='description'
+              placeholder='Descrição do produto'
               value={formData.description}
-              onChange={(e) => handleInputChange("description", e.target.value)}
-              className="min-h-[100px] bg-background/50 border-border/50 focus:border-primary transition-colors resize-none"
+              onChange={(e) => handleInputChange('description', e.target.value)}
+              className='min-h-[100px] bg-background/50 border-border/50 focus:border-primary transition-colors resize-none'
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="price" className="text-sm font-medium">
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <div className='space-y-2'>
+              <Label htmlFor='price' className='text-sm font-medium'>
                 Preço (R$) *
               </Label>
               <Input
-                id="price"
-                type="number"
-                placeholder="0.00"
-                min="0"
-                step="0.01"
-                value={formData.price || ""}
-                onChange={(e) => handleInputChange("price", parseFloat(e.target.value) || 0)}
+                id='price'
+                type='number'
+                placeholder='0.00'
+                min='0'
+                step='0.01'
+                value={formData.price || ''}
+                onChange={(e) =>
+                  handleInputChange('price', parseFloat(e.target.value) || 0)
+                }
                 required
-                className="h-11 bg-background/50 border-border/50 focus:border-primary transition-colors"
+                className='h-11 bg-background/50 border-border/50 focus:border-primary transition-colors'
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="stock" className="text-sm font-medium">
+            <div className='space-y-2'>
+              <Label htmlFor='stock' className='text-sm font-medium'>
                 Estoque
               </Label>
               <Input
-                id="stock"
-                type="number"
-                placeholder="0"
-                min="0"
-                value={formData.stock || ""}
-                onChange={(e) => handleInputChange("stock", parseInt(e.target.value) || 0)}
-                className="h-11 bg-background/50 border-border/50 focus:border-primary transition-colors"
+                id='stock'
+                type='number'
+                placeholder='0'
+                min='0'
+                value={formData.stock || ''}
+                onChange={(e) =>
+                  handleInputChange('stock', parseInt(e.target.value) || 0)
+                }
+                className='h-11 bg-background/50 border-border/50 focus:border-primary transition-colors'
               />
             </div>
           </div>
 
-          <div className="flex gap-3 pt-4">
+          <div className='flex gap-3 pt-4'>
             <Button
-              type="button"
-              variant="outline"
+              type='button'
+              variant='outline'
               onClick={onCancel}
-              className="flex-1 h-11 border-border/50 hover:bg-muted/50 transition-colors"
+              className='flex-1 h-11 border-border/50 hover:bg-muted/50 transition-colors'
               disabled={isLoading}
             >
               Cancelar
             </Button>
             <Button
-              type="submit"
-              className="flex-1 h-11 bg-primary hover:opacity-90 transition-opacity"
+              type='submit'
+              className='flex-1 h-11 bg-primary hover:opacity-90 transition-opacity'
               disabled={isLoading}
             >
               {isLoading ? (
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                <div className='flex items-center gap-2'>
+                  <div className='w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin' />
                   Salvando...
                 </div>
+              ) : product ? (
+                'Atualizar'
               ) : (
-                product ? "Atualizar" : "Criar Produto"
+                'Criar Produto'
               )}
             </Button>
           </div>

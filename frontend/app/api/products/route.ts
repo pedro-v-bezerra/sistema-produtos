@@ -1,29 +1,18 @@
-// app/api/products/route.ts
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3001';
+import { handleApiResponse } from '@/lib/handleApiResponse';
+import { ProductService } from '@/app/services/ProductService';
 
 export async function GET() {
-  
   const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
 
   try {
-    const res = await fetch(`${BASE_URL}/products`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await ProductService.getAll(token || '');
+    const data = handleApiResponse(res);
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      return NextResponse.json({ error: data.error || 'Erro ao buscar os produtos.' }, { status: res.status });
-    }
-
-    return NextResponse.json(data);
-  } catch (error) {
+    return NextResponse.json(data, { status: res.status });
+  } catch {
     return NextResponse.json({ error: 'Erro interno no servidor.' }, { status: 500 });
   }
 }
@@ -34,23 +23,12 @@ export async function POST(req: Request) {
   const token = cookieStore.get('token')?.value;
 
   try {
-    const res = await fetch(`${BASE_URL}/products`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(body),
-    });
+    const res = await ProductService.create(body, token || '');
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      return NextResponse.json({ error: data.error || 'Erro ao criar o produto.' }, { status: res.status });
-    }
+    const data = handleApiResponse(res);
 
     return NextResponse.json(data, { status: res.status });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Erro interno no servidor.' }, { status: 500 });
   }
 }

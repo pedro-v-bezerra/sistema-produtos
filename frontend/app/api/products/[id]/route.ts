@@ -1,23 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3001';
+import { ProductService } from '@/app/services/ProductService';
+import { handleApiResponse } from '@/lib/handleApiResponse';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const token = req.cookies.get('token')?.value;
   const { id } = await params;
 
   try {
-    const res = await fetch(`${BASE_URL}/products/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      return NextResponse.json({ error: data.error || 'Erro ao buscar produto' }, { status: res.status });
-    }
+    const res = await ProductService.getById(id, token || '');
+    const data = handleApiResponse(res);
 
     return NextResponse.json(data);
   } catch (error) {
@@ -32,20 +23,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   const { id } = await params;
 
   try {
-    const res = await fetch(`${BASE_URL}/products/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(body),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      return NextResponse.json({ error: data.error || 'Erro ao atualizar produto' }, { status: res.status });
-    }
+    const res = await ProductService.update(id, body, token || '');
+    const data = handleApiResponse(res);
 
     return NextResponse.json(data);
   } catch (error) {
@@ -58,23 +37,8 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
   const token = req.cookies.get('token')?.value;
   const { id } = await params;
   try {
-    const res = await fetch(`${BASE_URL}/products/${id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    let data = {};
-    try {
-      data = await res.json();
-    } catch (_) {
-      data = {};
-    }
-
-    if (!res.ok) {
-      return NextResponse.json({ error: (data as any).error || 'Erro ao deletar produto' }, { status: res.status });
-    }
+    const res = await ProductService.delete(id, token || '');
+    const data = handleApiResponse(res);
 
     return NextResponse.json(data);
   } catch (error) {

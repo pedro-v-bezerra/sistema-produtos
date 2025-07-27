@@ -1,9 +1,15 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode , useEffect} from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+  useCallback,
+} from 'react';
 import { useToast } from '@/hooks/use-toast';
-
-
+import { useRouter } from 'next/navigation';
 type Product = {
   id: string;
   name: string;
@@ -21,7 +27,6 @@ type ProductContextType = {
   updateProduct: (id: string, data: Partial<Product>) => Promise<Product | null>;
   deleteProduct: (id: string) => Promise<boolean>;
   loading: boolean;
-  error: string | null;
 };
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -29,26 +34,35 @@ const ProductContext = createContext<ProductContextType | undefined>(undefined);
 export const ProductProvider = ({ children }: { children: ReactNode }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const router = useRouter();
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     console.log('data:');
     try {
-      const res = await fetch('/api/products', );
+      const res = await fetch('/api/products');
       const data = await res.json();
       if (res.ok) {
-        setProducts(data);
+        setProducts(data.data);
       } else {
+        if (data.status === 401) {
+          toast({
+            title: 'Não autorizado!',
+            description: 'Sua sessão expirou. Faça login novamente.',
+            variant: 'destructive',
+          });
+          router.push('/login');
+        }
         throw new Error(data.error || 'Erro ao buscar produtos');
       }
-    } catch (err: any) {
-      toast({ title: err.message, variant: 'destructive' });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Erro no sistema';
+      toast({ title: errorMessage, variant: 'destructive' });
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast, router]);
 
   const fetchProduct = async (id: string) => {
     try {
@@ -56,8 +70,9 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
       const data = await res.json();
       if (res.ok) return data;
       throw new Error(data.error || 'Erro ao buscar produto');
-    } catch (err: any) {
-      toast({ title: err.message, variant: 'destructive' });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Erro no sistema';
+      toast({ title: errorMessage, variant: 'destructive' });
       return null;
     }
   };
@@ -71,17 +86,18 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
       });
       const newProduct = await res.json();
       if (res.ok) {
-        setProducts((prev) => [...prev, newProduct]);
+        setProducts((prev) => [...prev, newProduct.data]);
         toast({
           title: 'Produto criado!',
           description: 'O produto foi criado com sucesso!',
           variant: 'success',
-        })
+        });
         return newProduct;
       }
       throw new Error(newProduct.error || 'Erro ao criar produto');
-    } catch (err: any) {
-      toast({ title: err.message, variant: 'destructive' });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Erro no sistema';
+      toast({ title: errorMessage, variant: 'destructive' });
       return null;
     }
   };
@@ -95,19 +111,18 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
       });
       const updated = await res.json();
       if (res.ok) {
-        setProducts((prev) =>
-          prev.map((p) => (p.id === id ? updated : p))
-        );
+        setProducts((prev) => prev.map((p) => (p.id === id ? updated.data : p)));
         toast({
           title: 'Produto editado!',
           description: 'O produto foi editado com sucesso!',
           variant: 'success',
-        })
+        });
         return updated;
       }
       throw new Error(updated.error || 'Erro ao atualizar produto');
-    } catch (err: any) {
-      toast({ title: err.message, variant: 'destructive' });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Erro no sistema';
+      toast({ title: errorMessage, variant: 'destructive' });
       return null;
     }
   };
@@ -123,14 +138,16 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
         return true;
       }
       throw new Error(data.error || 'Erro ao deletar produto');
-    } catch (err: any) {
-      toast({ title: err.message, variant: 'destructive' });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Erro no sistema';
+      toast({ title: errorMessage, variant: 'destructive' });
       return false;
     }
   };
+
   useEffect(() => {
-    fetchProducts()
-  }, [])
+    fetchProducts();
+  }, [fetchProducts]);
 
   return (
     <ProductContext.Provider
@@ -142,7 +159,6 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
         updateProduct,
         deleteProduct,
         loading,
-        error,
       }}
     >
       {children}

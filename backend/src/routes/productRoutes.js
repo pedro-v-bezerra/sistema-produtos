@@ -1,31 +1,56 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const ProductController = require("../controllers/ProductController");
-const productSchema = require("../validations/productValidation");
-const authenticate = require("../middlewares/auth");
+const ProductController = require('../controllers/ProductController');
+const productCreateSchema = require('../schemas/productCreateSchema');
+const productUpdateSchema = require('../schemas/productUpdateSchema');
+const authenticateMiddleware = require('../middlewares/authenticateMiddleware');
 
-router.get("/", authenticate, ProductController.index);
-router.get("/:id", authenticate, ProductController.show);
-router.post("/", authenticate, async (req, res) => {
+router.get('/', authenticateMiddleware, async (req, res) => {
   try {
-    await productSchema.validate(req.body, { abortEarly: false }); // valida tudo de uma vez
-    return ProductController.store(req, res);
-  } catch (err) {
-    return res.status(400).json({
-      errors: err.errors, // array com as mensagens de erro do yup
-    });
+    return await ProductController.listAll(req, res);
+  } catch {
+    return res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
-router.put("/:id", authenticate, async (req, res) => {
+
+router.get('/:id', authenticateMiddleware, async (req, res) => {
   try {
-    await productSchema.validate(req.body, { abortEarly: false }); // valida tudo de uma vez
+    return await ProductController.listById(req, res);
+  } catch {
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+router.post('/', authenticateMiddleware, async (req, res) => {
+  try {
+    await productCreateSchema.validate(req.body, { abortEarly: false });
+    return ProductController.add(req, res);
+  } catch (err) {
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({ errors: err.errors });
+    }
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+router.put('/:id', authenticateMiddleware, async (req, res) => {
+  try {
+    await productUpdateSchema.validate(req.body, { abortEarly: false });
     return ProductController.update(req, res);
   } catch (err) {
-    return res.status(400).json({
-      errors: err.errors, // array com as mensagens de erro do yup
-    });
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({ errors: err.errors });
+    }
+    return res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
-router.delete("/:id", authenticate, ProductController.destroy);
+
+router.delete('/:id', authenticateMiddleware, async (req, res) => {
+  try {
+    return await ProductController.delete(req, res);
+  } catch {
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
 
 module.exports = router;
