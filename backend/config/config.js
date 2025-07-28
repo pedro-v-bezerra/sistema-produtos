@@ -10,4 +10,14 @@ module.exports = {
     port: process.env.DB_PORT || 3306,
     dialect: 'mysql',
   },
+  production: {
+    use_env_variable: 'DATABASE_URL',
+    dialect: 'mysql',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    }
+  }
 };
