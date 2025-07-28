@@ -44,7 +44,7 @@ cd sistema-produtos/backend
 ### 2. Configurar variáveis de ambiente
 
 Crie um arquivo .env na raiz da pasta backend/ com o conteúdo:
-
+```
 DB_HOST=host.docker.internal
 DB_PORT=3306
 DB_USER=root
@@ -54,7 +54,7 @@ JWT_SECRET=SEUJWTSECRET
 JWT_EXPIRES_IN=1h
 AUTH_EMAIL=EMAIL_DE_LOGIN_PADRÃO
 AUTH_PASSWORD=SENHA_DE_LOGIN_PADRÃO
-
+```
 ---
 
 ### 3. Instalar as dependências do backend
@@ -75,9 +75,9 @@ Na raiz do projeto (sistema-produtos), execute:
 docker compose up --build
 ```
 
-Esse comando vai iniciar o container do MySQL na porta 3307.
-O projeto está configurado para rodar migrations subir o container, então não precisa se preocupar em rodar manualmente.
-Após este comando o container já terá início, abra um novo terminal para o próximo passo.
+- Esse comando vai iniciar o container do MySQL na porta 3307.
+- O projeto está configurado para rodar migrations subir o container, então não precisa se preocupar em rodar manualmente.
+- Após este comando o container já terá início, abra um novo terminal para o próximo passo.
 
 ---
 
@@ -93,25 +93,20 @@ npx sequelize-cli db:seed
 ### 7. Testar a API
 
 Após rodar o backend, você pode testar os endpoints da API de produtos (exemplo):
-
-POST http://localhost:3001/auth/login --> Faça login com as variáveis definidas em .env
-
-GET http://localhost:3001/products
-
-POST http://localhost:3001/products
-
-PUT http://localhost:3001/products/:id
-
-DELETE http://localhost:3001/products/:id
+- POST http://localhost:3001/auth/login --> Faça login com as variáveis definidas em .env
+- GET http://localhost:3001/products
+- POST http://localhost:3001/products
+- PUT http://localhost:3001/products/:id
+- DELETE http://localhost:3001/products/:id
 
 ---
 
 ### 8. Observações
 
-O banco MySQL está rodando via Docker e a conexão usa a porta 3307.
-Caso tenha problema de conexão, verifique se o Docker está ativo e o container do MySQL está rodando (docker ps).
-Se quiser alterar usuário ou senha, ajuste também o arquivo .env e o docker-compose.yml.
-Para limpar o banco, rode npx sequelize-cli db:migrate:undo:all e depois npx sequelize-cli db:migrate novamente.
+- O banco MySQL está rodando via Docker e a conexão usa a porta 3307.
+- Caso tenha problema de conexão, verifique se o Docker está ativo e o container do MySQL está rodando (docker ps).
+- Se quiser alterar usuário ou senha, ajuste também o arquivo .env e o docker-compose.yml.
+- Para limpar o banco, rode npx sequelize-cli db:migrate:undo:all e depois npx sequelize-cli db:migrate novamente.
 
 ---
 # Frontend
@@ -131,8 +126,9 @@ npm install
 ### 2. Criar o arquivo .env
 
 Exemplo de arquivo:
-
+```
 BASE_URL=http://localhost:3001
+```
 
 ---
 
@@ -143,5 +139,13 @@ npm run dev
 ```
 
 # Considerações e Contato
+Foi feito o deploy público do projeto, para acessar https://sistema-produtos.vercel.app/.
+
+
+Serviços utilizados no deploy:
+- Frontend - [Vercel](https://vercel.com/)
+- Backend - [Railway](https://railway.com/)
+- Database - [AivenConsole](https://console.aiven.io/)
+
 
 Para considerações, sugestões ou dúvidas entre em contato pelo e-mail pedrolima.dev@hotmail.com
