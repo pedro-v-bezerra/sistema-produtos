@@ -21,6 +21,14 @@ export interface Product {
   stock: number;
 }
 
+interface ProductFormData {
+  name: string;
+  description: string;
+  price: string; // ← com máscara
+  category: string;
+  stock: number;
+}
+
 interface ProductFormProps {
   product?: Product;
   onSubmit: (product: Product) => void;
@@ -34,10 +42,10 @@ const ProductForm = ({
   onCancel,
   isLoading = false,
 }: ProductFormProps) => {
-  const [formData, setFormData] = useState<Product>({
+  const [formData, setFormData] = useState<ProductFormData>({
     name: '',
     description: '',
-    price: 0,
+    price: '',
     category: '',
     stock: 0,
   });
@@ -45,12 +53,38 @@ const ProductForm = ({
 
   useEffect(() => {
     if (product) {
-      setFormData(product);
+      setFormData({
+        ...product,
+        price: product.price.toFixed(2).replace('.', ','),
+      });
     }
   }, [product]);
 
+  const formatCurrency = (value: string) => {
+    const numeric = value.replace(/\D/g, '');
+    const float = (parseFloat(numeric) / 100).toFixed(2);
+    return float.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  };
+
+  const handleInputChange = (field: keyof ProductFormData, value: string | number) => {
+    if (field === 'price' && typeof value === 'string') {
+      const formatted = formatCurrency(value);
+      setFormData((prev) => ({
+        ...prev,
+        price: formatted,
+      }));
+      return;
+    }
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const numericPrice = parseFloat(formData.price.replace(/\./g, '').replace(',', '.'));
 
     if (!formData.name.trim() || !formData.category.trim()) {
       toast({
@@ -61,7 +95,7 @@ const ProductForm = ({
       return;
     }
 
-    if (formData.price <= 0) {
+    if (numericPrice <= 0 || isNaN(numericPrice)) {
       toast({
         title: 'Erro de validação',
         description: 'O preço deve ser maior que zero.',
@@ -70,14 +104,12 @@ const ProductForm = ({
       return;
     }
 
-    onSubmit(formData);
-  };
+    const productToSubmit: Product = {
+      ...formData,
+      price: numericPrice,
+    };
 
-  const handleInputChange = (field: keyof Product, value: string | number) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    onSubmit(productToSubmit);
   };
 
   return (
@@ -145,14 +177,10 @@ const ProductForm = ({
               </Label>
               <Input
                 id='price'
-                type='number'
-                placeholder='0.00'
-                min='0'
-                step='0.01'
-                value={formData.price || ''}
-                onChange={(e) =>
-                  handleInputChange('price', parseFloat(e.target.value) || 0)
-                }
+                type='text'
+                placeholder='0,00'
+                value={formData.price}
+                onChange={(e) => handleInputChange('price', e.target.value)}
                 required
                 className='h-11 bg-background/50 border-border/50 focus:border-primary transition-colors'
               />
