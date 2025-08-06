@@ -76,7 +76,7 @@ docker compose up --build
 ```
 
 - Esse comando vai iniciar o container do MySQL na porta 3307.
-- O projeto está configurado para rodar migrations subir o container, então não precisa se preocupar em rodar manualmente.
+- O projeto está configurado para rodar migrations ao subir o container, então não precisa se preocupar em rodar manualmente.
 - Após este comando o container já terá início, abra um novo terminal para o próximo passo.
 
 ---
