@@ -46,7 +46,7 @@ cd sistema-produtos/backend
 Crie um arquivo .env na raiz da pasta backend/ com o conteúdo:
 ```
 DB_HOST=host.docker.internal
-DB_PORT=3306
+DB_PORT=3307
 DB_USER=root
 DB_PASSWORD=root
 DB_NAME=mydb
@@ -83,9 +83,11 @@ docker compose up --build
 
 ### 5. Rodar as seeds para popular o banco com produtos de exemplo (Opcional)
 
+Em outro terminal, com o docker rodando execute:
+
 ```bash
 cd backend
-npx sequelize-cli db:seed
+npx sequelize-cli db:seed:all
 ```
 
 ---
