@@ -30,7 +30,7 @@ services:
       DB_USER: user
       DB_PASSWORD: password
       DB_NAME: mydb
-      JWT_SECRET: Z4s&yH@3qP!t92fL^XvBd8MjKcW0RgTu
+      JWT_SECRET: SEUJWTSECRET
     volumes:
       - ./backend:/app
     command: npm start
