@@ -35,7 +35,7 @@
 ### 1. Clonar o repositório
 
 ```bash
-git clone <url-do-seu-repositorio>
+git clone https://github.com/pedro-v-bezerra/sistema-produtos.git
 cd sistema-produtos/backend
 ```
 
